@@ -104,6 +104,8 @@ local function boxesp(v)
     tracer.Thickness = 1
     tracer.Transparency = 1
     
+    v.Character:WaitForChild("Middle"):WaitForChild("Gate")
+    
     local connection = nil
     
     connection = rs.RenderStepped:Connect(function()
@@ -256,14 +258,17 @@ end
 for i,v in pairs(game:GetService("Players"):GetPlayers()) do
     coroutine.wrap(boxesp)(v)
     coroutine.wrap(chatLogFunc)(v)
+    v.CharacterAdded:Connect(function()
+        coroutine.wrap(boxesp)(v)
+    coroutine.wrap(chatLogFunc)(v)
+    end)
 end
 
 game:GetService("Players").PlayerAdded:Connect(function(v)
-    repeat
-        wait()
-    until v.Character:IsADescendantOf(workspace.Alive)
-    coroutine.wrap(boxesp)(v)
-    coroutine.wrap(chatLogFunc)(v)
+    v.CharacterAdded:Connect(function()
+        coroutine.wrap(boxesp)(v)
+        coroutine.wrap(chatLogFunc)(v)
+    end)
 end)
 
 local part1 = nil
