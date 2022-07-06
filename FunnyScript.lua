@@ -36,7 +36,7 @@ local function getCloseToGates(chr)
     local closestGate = nil
     local dist = nil
     for i,v in pairs(gates) do
-        local check = math.abs((chr.Position.HumanoidRootPart-gates.Position).Magnitude)
+        local check = math.abs((chr.HumanoidRootPart.Position-v.Position).Magnitude)
         if check < 500 then
             closestGate = v
             dist = check
@@ -149,7 +149,14 @@ local function boxesp(v)
                 
                 local gate,dist = getCloseToGates(v.Character)
                 if gate and dist then
-                    text = text.." | "..gate.Name.." "..tostring(dist)
+                    text = text.." | "..gate.Name.." "..tostring(math.floor(dist+0.5))
+                    nameText.Color = Color3.new(1,0,0)
+                else
+                    nameText.Color = Color3.new(1,1,1)
+                end
+                
+                if v.Character.Torso.Middle.Gate.Enabled then
+                    nameText.Color = Color3.new(0,0,1)
                 end
                 
                 --nameText.Size = camera.ViewportSize.X/rootPosition.Z
@@ -212,7 +219,7 @@ local function trinketEspFunc(v)
     
     local trinket = v:FindFirstChildWhichIsA("BasePart")
     
-    local connection = nil
+    local connection
     
     connection = rs.RenderStepped:Connect(function()
         if trinketEsp and workspace.MouseIgnore:FindFirstChild(v.Name) then
@@ -227,7 +234,7 @@ local function trinketEspFunc(v)
             end
         else
             trinketText.Visible = false
-            if not v then trinketText:Remove() connection:Disconnect() return end
+            if not workspace.MouseIgnore:FindFirstChild(v.Name) then trinketText:Remove() connection:Disconnect() return end
         end
     end)
 end
@@ -252,8 +259,9 @@ for i,v in pairs(game:GetService("Players"):GetPlayers()) do
 end
 
 game:GetService("Players").PlayerAdded:Connect(function(v)
-    coroutine.wrap(boxesp)(v)
-    coroutine.wrap(chatLogFunc)(v)
+    repeat
+        wait()
+    until v.Character:IsADescendantOf(workspace.Alive)
 end)
 
 local part1 = nil
