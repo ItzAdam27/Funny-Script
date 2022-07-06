@@ -103,7 +103,7 @@ local function boxesp(v)
     tracer.Color = Color3.new(1,1,1)
     tracer.Thickness = 1
     tracer.Transparency = 1
-    
+    if v.Character == nil then wait(5) end
     v.Character:WaitForChild("Torso"):WaitForChild("Middle"):WaitForChild("Gate")
     
     local connection = nil
@@ -241,38 +241,6 @@ local function trinketEspFunc(v)
     end)
 end
 
-local function eyeEspFunc(v)
-    
-    local eyeText = Drawing.new("Text")
-    eyeText.Visible = false
-    eyeText.Center = true
-    eyeText.Outline = true
-    eyeText.Color = Color3.new(0,1,0)
-    eyeText.Font = 2
-    eyeText.Size = 13
-    
-    local connection
-    
-    local basePart = v:FindFirstChildWhichIsA("BasePart")
-    
-    connection = rs.RenderStepped:Connect(function()
-        if trinketEsp and basePart.Transparency == 0 and v:FindFirstChildWhichIsA("ClickDetector") then
-            local vector, onScreen = camera:worldToViewportPoint(basePart.Position)
-            
-            if onScreen then
-                eyeText.Position = Vector2.new(vector.X,vector.Y)
-                eyeText.Text = v.Name.. " ["..math.floor(math.abs((hrp.Position-basePart.Position).Magnitude)+0.5).."]"
-                eyeText.Visible = true
-            else
-                eyeText.Visible = false
-            end
-        else
-            eyeText.Visible = false
-        end
-    end)
-    
-end
-
 local function chatLogFunc(v)
     v.Chatted:Connect(function(msg)
         if chatLog then
@@ -302,14 +270,6 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
         coroutine.wrap(chatLogFunc)(v)
     end)
 end)
-
-for _,eye in pairs(workspace.EyeList:GetChildren()) do
-    
-    for i,v in pairs(eye:GetChildren()) do
-        coroutine.wrap(eyeEspFunc)(v)
-    end
-    
-end
 
 local part1 = nil
 local part2 = nil
@@ -423,7 +383,7 @@ local spells = {
     ["Gelidus"] = {100,85},
     ["Viribus"] = {35,5,70,60},
     ["Telorum"] = {90,80},
-    ["Velo"] = {100,0,70,60},
+    ["Velo"] = {100,0,65,45},
     ["Catena"] = {70,20,60,45},
     ["Gate"] = {1,0,80,70},
     ["Snarvindur"] = {60,50,35,10},
@@ -456,6 +416,46 @@ snapOverlay.Color = Color3.new(0,0,1)
 snapOverlay.Thickness = 1
 snapOverlay.Transparency = 0.5
 snapOverlay.Filled = true
+
+local ceerisText = Drawing.new("Text")
+ceerisText.Center = true
+ceerisText.Outline = true
+ceerisText.Color = Color3.new(1,1,1)
+ceerisText.Font = 2
+ceerisText.Size = 13
+ceerisText.Position = Vector2.new(camera.ViewportSize.X-ceerisText.Size-221,camera.ViewportSize.Y/2)
+ceerisText.Text = "Not Checked Ceeris"
+
+local function ceerisUpdateFunc(check)
+    if check then
+        ceerisText.Color = Color3.new(0,1,0)
+        ceerisText.Text = "Ceeris Rift Off CD"
+    elseif not check then
+        ceerisText.Color = Color3.new(1,0,0)
+        ceerisText.Text = "Ceeris Rift On CD"
+    end
+end
+
+for i,v in pairs(workspace.EYEBALLS:GetChildren()) do
+    print(v.Name)
+    if v:IsA("Folder") and v.Name == "ClickEyes" then
+        ceerisUpdateFunc(true)
+    elseif v:IsA("Folder") and not v.Name == "ClickEyes" then
+        ceerisUpdateFunc(false)
+    end
+end
+
+workspace.EYEBALLS.ChildAdded:Connect(function(added)
+    if added:IsA("Folder") then
+        ceerisUpdateFunc(false)
+    end
+end)
+
+workspace.EYEBALLS.ChildRemoved:Connect(function(removed)
+    if removed:IsA("Folder") then
+        ceerisUpdateFunc(true)
+    end
+end)
 
 local function updateMana()
     rs.RenderStepped:Connect(function()
@@ -512,6 +512,7 @@ local function overlayButtonFunc()
     manaText.Visible = not manaText.Visible
     spellOverlay.Visible = not spellOverlay.Visible
     snapOverlay.Visible = not snapOverlay.Visible
+    ceerisText.Visible = not ceerisText.Visible
 end
 
 local function ambianceButtonFunc()
