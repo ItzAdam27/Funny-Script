@@ -104,7 +104,7 @@ local function boxesp(v)
     tracer.Thickness = 1
     tracer.Transparency = 1
     
-    v.Character:WaitForChild("Middle"):WaitForChild("Gate")
+    v.Character.Torso:WaitForChild("Middle"):WaitForChild("Gate")
     
     local connection = nil
     
