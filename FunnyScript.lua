@@ -222,7 +222,7 @@ local function trinketEspFunc(v)
     local connection
     
     connection = rs.RenderStepped:Connect(function()
-        if trinketEsp and workspace.MouseIgnore:FindFirstChild(v.Name) then
+        if trinketEsp and trinket and workspace.MouseIgnore:FindFirstChild(v.Name) then
             local vector, onScreen = camera:worldToViewportPoint(trinket.Position)
             
             if onScreen then
