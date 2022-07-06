@@ -241,6 +241,38 @@ local function trinketEspFunc(v)
     end)
 end
 
+local function eyeEspFunc(v)
+    
+    local eyeText = Drawing.new("Text")
+    eyeText.Visible = false
+    eyeText.Center = true
+    eyeText.Outline = true
+    eyeText.Color = Color3.new(0,1,0)
+    eyeText.Font = 2
+    eyeText.Size = 13
+    
+    local connection
+    
+    local basePart = v:FindFirstChildWhichIsA("BasePart")
+    
+    connection = rs.RenderStepped:Connect(function()
+        if trinketEsp and basePart.Transparency == 0 and v:FindFirstChildWhichIsA("ClickDetector") then
+            local vector, onScreen = camera:worldToViewportPoint(basePart.Position)
+            
+            if onScreen then
+                eyeText.Position = Vector2.new(vector.X,vector.Y)
+                eyeText.Text = v.Name.. " ["..math.floor(math.abs((hrp.Position-basePart.Position).Magnitude)+0.5).."]"
+                eyeText.Visible = true
+            else
+                eyeText.Visible = false
+            end
+        else
+            eyeText.Visible = false
+        end
+    end)
+    
+end
+
 local function chatLogFunc(v)
     v.Chatted:Connect(function(msg)
         if chatLog then
@@ -253,6 +285,14 @@ local function chatLogFunc(v)
             end
         end
     end)
+end
+
+for _,eye in pairs(workspace.EyeList:GetChildren()) do
+    
+    for i,v in pairs(eye:GetChildren()) do
+        coroutine.wrap(eyeEspFunc)(v)
+    end
+    
 end
 
 for i,v in pairs(game:GetService("Players"):GetPlayers()) do
