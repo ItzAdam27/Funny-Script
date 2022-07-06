@@ -457,46 +457,6 @@ snapOverlay.Thickness = 1
 snapOverlay.Transparency = 0.5
 snapOverlay.Filled = true
 
-local ceerisText = Drawing.new("Text")
-ceerisText.Center = true
-ceerisText.Outline = true
-ceerisText.Color = Color3.new(1,1,1)
-ceerisText.Font = 2
-ceerisText.Size = 13
-ceerisText.Position = Vector2.new(camera.ViewportSize.X-ceerisText.Size-221,camera.ViewportSize.Y/2)
-ceerisText.Text = "Not Checked Ceeris"
-
-local function ceerisUpdateFunc(check)
-    if check then
-        ceerisText.Color = Color3.new(0,1,0)
-        ceerisText.Text = "Ceeris Rift Off CD"
-    elseif not check then
-        ceerisText.Color = Color3.new(1,0,0)
-        ceerisText.Text = "Ceeris Rift On CD"
-    end
-end
-
-for i,v in pairs(workspace.EYEBALLS:GetChildren()) do
-    print(v.Name)
-    if v:IsA("Folder") and v.Name == "ClickEyes" then
-        ceerisUpdateFunc(true)
-    elseif v:IsA("Folder") and not v.Name == "ClickEyes" then
-        ceerisUpdateFunc(false)
-    end
-end
-
-workspace.EYEBALLS.ChildAdded:Connect(function(added)
-    if added:IsA("Folder") then
-        ceerisUpdateFunc(false)
-    end
-end)
-
-workspace.EYEBALLS.ChildRemoved:Connect(function(removed)
-    if removed:IsA("Folder") then
-        ceerisUpdateFunc(true)
-    end
-end)
-
 local function updateMana()
     rs.RenderStepped:Connect(function()
         if character:FindFirstChild("Stats") and character.Stats:FindFirstChild("Mana") then
@@ -552,7 +512,6 @@ local function overlayButtonFunc()
     manaText.Visible = not manaText.Visible
     spellOverlay.Visible = not spellOverlay.Visible
     snapOverlay.Visible = not snapOverlay.Visible
-    ceerisText.Visible = not ceerisText.Visible
 end
 
 local function ambianceButtonFunc()
