@@ -262,6 +262,8 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
     repeat
         wait()
     until v.Character:IsADescendantOf(workspace.Alive)
+    coroutine.wrap(boxesp)(v)
+    coroutine.wrap(chatLogFunc)(v)
 end)
 
 local part1 = nil
