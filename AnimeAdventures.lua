@@ -20,8 +20,6 @@ if workspace:WaitForChild("_MAP_CONFIG"):WaitForChild("IsLobby").Value then
         if v:IsA("ImageButton") then
             if v.Equipped.Visible then
                 txt = txt..v["_uuid"].Value.." = "..v.name.Text..","
-                --uuidToName[v["_uuid"].Value] = v.name.Text
-                --nameToUuid[v.name.Text] = v["_uuid"].Value
             end
         end
     end
