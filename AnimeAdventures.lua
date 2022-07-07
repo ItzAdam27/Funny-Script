@@ -16,7 +16,8 @@ if workspace:WaitForChild("_MAP_CONFIG"):WaitForChild("IsLobby").Value then
     
     local txt = ""
     task.wait(5)
-    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("collection"):WaitForChild("grid"):WaitForChild("List"):WaitForChild(Outer"):WaitForChild("UnitFrames"):GetChildren()) do
+    
+    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("collection"):WaitForChild("grid"):WaitForChild("List"):WaitForChild("Outer"):WaitForChild("UnitFrames"):GetChildren()) do
         if v:IsA("ImageButton") then
             if v.Equipped.Visible then
                 txt = txt..v["_uuid"].Value.." = "..v.name.Text..","
