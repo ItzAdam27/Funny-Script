@@ -295,6 +295,49 @@ for _,eye in pairs(workspace.EyeList:GetChildren()) do
     
 end
 
+local ceerisText = Drawing.new("Text")
+ceerisText.Center = true
+ceerisText.Outline = true
+ceerisText.Color = Color3.new(1,1,1)
+ceerisText.Font = 2
+ceerisText.Size = 13
+ceerisText.Position = Vector2.new(camera.ViewportSize.X-ceerisText.Size-221,camera.ViewportSize.Y/2)
+ceerisText.Text = "Not Checked Ceeris"
+
+local function ceerisUpdateFunc(check)
+    if check then
+        ceerisText.Color = Color3.new(0,1,0)
+        ceerisText.Text = "Ceeris Rift Off CD"
+    elseif not check then
+        ceerisText.Color = Color3.new(1,0,0)
+        ceerisText.Text = "Ceeris Rift On CD"
+    end
+end
+local var = true
+for i,v in pairs(workspace.EYEBALLS:GetChildren()) do
+    
+    if v:IsA("Folder") and v.Name == "DungeonEyes" then
+        var = false
+        ceerisUpdateFunc(false)
+    end
+end
+if var then
+    ceerisUpdateFunc(true)
+end
+
+workspace.EYEBALLS.ChildAdded:Connect(function(added)
+    if added:IsA("Folder") and added.Name == "DungeonCooldown" then
+        ceerisUpdateFunc(false)
+    end
+end)
+
+workspace.EYEBALLS.ChildRemoved:Connect(function(removed)
+    if removed:IsA("Folder") and removed.Name == "DungeonCooldown"  then
+        ceerisUpdateFunc(true)
+    end
+end)
+
+
 for i,v in pairs(game:GetService("Players"):GetPlayers()) do
     coroutine.wrap(boxesp)(v)
     coroutine.wrap(chatLogFunc)(v)
@@ -427,7 +470,7 @@ local spells = {
     ["Catena"] = {70,20,60,45},
     ["Gate"] = {1,0,80,70},
     ["Snarvindur"] = {60,50,35,10},
-    ["Percutiens"] = {75,55,75,55},
+    ["Percutiens"] = {90,80,80,70},
     ["Fimbulvetr"] = {95,60},
     
 }
@@ -512,6 +555,7 @@ local function overlayButtonFunc()
     manaText.Visible = not manaText.Visible
     spellOverlay.Visible = not spellOverlay.Visible
     snapOverlay.Visible = not snapOverlay.Visible
+    ceerisText.Visible = not ceerisText.Visible
 end
 
 local function ambianceButtonFunc()
