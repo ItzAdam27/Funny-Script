@@ -99,6 +99,7 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
                 local shouldSpawn = true
                 for i,v in pairs(unitAmounts) do
                     if i == uuid then continue end
+                  print(type(v)) print(type(unitAmounts[uuid]))
                     if v < unitAmounts[uuid] and not unitCap[i] > v then
                         shouldSpawn = false
                     end
