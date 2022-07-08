@@ -95,7 +95,7 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
             end
             for i,v in pairs(units) do
                 local unitStats = v["_stats"]
-                if equippedData[id].upgrade[unitStats.upgrade.Value+1] then continue end
+                if not equippedData[id].upgrade[unitStats.upgrade.Value+1] then continue end
                 if tonumber(equippedData[id].upgrade[unitStats.upgrade.Value+1].cost) <= stats.resource.Value then
                     upgradeRemote:InvokeServer(v)
                 end
