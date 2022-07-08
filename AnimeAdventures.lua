@@ -78,7 +78,7 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
             for i3,v3 in pairs(uuidToName) do
                 if v2 == v3 then
                     equippedData[v3] = v
-                    unitCap[v3] = equippedData[v3].spawn_cap
+                    unitCap[i3] = equippedData[v3].spawn_cap
                 end
             end
         end
