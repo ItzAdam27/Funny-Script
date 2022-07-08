@@ -95,11 +95,14 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
         
         rs.RenderStepped:Connect(function()
             if stats.resource.Value >= tonumber(equippedData[id].cost) and #units < totalUnits then
-                local cap = unitCap[i] or 3
+                
                 local shouldSpawn = true
                 for i,v in pairs(unitAmounts) do
                     if i == uuid then continue end
-                  print(type(v)) print(type(unitAmounts[uuid]))
+                    local cap = unitCap[i]
+                    if type(cap) == 'boolean' then
+                        cap = 3
+                    end
                     if v < unitAmounts[uuid] and not cap > v then
                         shouldSpawn = false
                     end
