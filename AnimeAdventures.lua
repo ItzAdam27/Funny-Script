@@ -111,7 +111,8 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
                 
                 for i,v in pairs(workspace["_UNITS"]:GetChildren()) do
                     if v:IsA("Model") and v.Name == equippedData[id].id and not table.find(units,v) then
-                        unitAmounts[uuid]+=1
+                        amount = unitAmounts[uuid]
+                        unitAmounts[uuid] = amount+1
                         table.insert(units,v)
                     end
                 end
