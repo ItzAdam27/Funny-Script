@@ -4,6 +4,12 @@ local unitData = require(game:GetService("ReplicatedStorage"):WaitForChild("src"
 local player = game.Players.LocalPlayer
 local stats = player:WaitForChild("_stats")
 
+game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
+   if State == Enum.TeleportState.Started then
+       syn.queue_on_teleport('loadstring(game:HttpGet(("https://raw.githubusercontent.com/ItzAdam27/Funny-Script/main/AnimeAdventures.lua"),true))()')
+   end
+end)
+
 local unitAttributes = {
     ["Luffo"] = "Ground",
     ["Orwin"] = "Hybrid","Summon",
@@ -56,19 +62,23 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
     end
     
     local uuidToName = {}
+    local unitAmounts = {}
     for i,v in pairs(unitTbl) do
         local split = string.split(v," = ")
         if split[1] == nil or split[2] == nil then continue end
         uuidToName[split[1]] = split[2]
+        unitAmounts[split[1]] = 0
     end
     
     local equippedData = {}
+    local unitCap = {}
     
     for i,v in pairs(unitData) do
         for i2,v2 in pairs(v) do
             for i3,v3 in pairs(uuidToName) do
                 if v2 == v3 then
                     equippedData[v3] = v
+                    unitCap[v3] = equippedData[v3].spawn_cap
                 end
             end
         end
@@ -85,10 +95,23 @@ elseif not workspace["_MAP_CONFIG"].IsLobby.Value then
         
         rs.RenderStepped:Connect(function()
             if stats.resource.Value >= tonumber(equippedData[id].cost) and #units < totalUnits then
-                spawnRemote:InvokeServer(uuid,cframe)
+                    
+                local shouldSpawn = true
+                for i,v in pairs(unitAmounts) do
+                    if i == uuid then continue end
+                    if v < unitAmounts[uuid] then
+                        shouldSpawn = false
+                    end
+                end
+                    
+                if should spawn then spawnRemote:InvokeServer(uuid,cframe) end
                 task.wait(0.25)
+                
+                
+                
                 for i,v in pairs(workspace["_UNITS"]:GetChildren()) do
                     if v:IsA("Model") and v.Name == equippedData[id].id and not table.find(units,v) then
+                        unitAmounts[uuid]+=1
                         table.insert(units,v)
                     end
                 end
